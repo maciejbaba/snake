@@ -1,0 +1,12 @@
+body {
+  margin: 0;
+}
+
+#main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  width: 400px;
+  height: 400px;
+}
