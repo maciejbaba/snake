@@ -1,3 +1,16 @@
+:root {
+  --board-width: 1;
+  --board-height: 1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+*::before, *::after {
+  box-sizing: inherit;
+}
+
 body {
   margin: 0px;
   height: 100vh;
@@ -9,11 +22,16 @@ body {
 
 #game-board {
   background-color: black;
+  color: white;
+  display: grid;
+  grid-template-rows: repeat(var(--board-height), 1fr);
+  grid-template-columns: repeat(var(--board-width), 1fr);
   width: 600px;
   height: 600px;
 }
 
-#board-block {
+.board-block {
   width: 40px;
   height: 40px;
+  border: 1px solid white;
 }
