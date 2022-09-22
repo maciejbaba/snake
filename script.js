@@ -1,3 +1,4 @@
+
 window.onload = function() {
   canvas = document.getElementById("game-board")
   context = canvas.getContext("2d")
