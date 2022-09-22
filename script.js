@@ -35,7 +35,7 @@ function game() {
   if (appleInSnake()) {
     eatAppleAndCreateNewOne()
   }
-  
+
   drawApple()
 }
 
@@ -64,7 +64,7 @@ function drawSnake() {
 function eatAppleAndCreateNewOne() {
   tail++
   appleX = Math.floor(Math.random() * tileCount)
-  appleY = 5//Math.floor(Math.random() * tileCount)
+  appleY = Math.floor(Math.random() * tileCount)
 }
 
 function drawApple() {
