@@ -32,11 +32,15 @@ function game() {
   while(trail.length > tail) {
     trail.shift()
   }
-
-  if (appleX == playerX && appleY == playerY) {
+  if (appleInSnake()) {
     eatAppleAndCreateNewOne()
   }
-  drawApple()  
+  
+  drawApple()
+}
+
+function appleInSnake () {
+  return appleX == playerX && appleY == playerY
 }
 
 function drawCanvas() {
@@ -48,8 +52,11 @@ function drawSnake() {
   context.fillStyle = "lime"
   for (let i = 0; i < trail.length; i++) {
     context.fillRect(trail[i].x * gridSize, trail[i].y * gridSize, gridSize - 2, gridSize - 2)
-    if (trail[i].x == playerX && trail[i].y == [playerY]) {
+    if (trail[i].x == playerX && trail[i].y == playerY) {
       tail = 5
+    }
+    if (trail[i].x == appleX && trail[i].y == appleY) {
+      eatAppleAndCreateNewOne()
     }
   }
 }
@@ -57,7 +64,7 @@ function drawSnake() {
 function eatAppleAndCreateNewOne() {
   tail++
   appleX = Math.floor(Math.random() * tileCount)
-  appleY = Math.floor(Math.random() * tileCount)
+  appleY = 5//Math.floor(Math.random() * tileCount)
 }
 
 function drawApple() {
