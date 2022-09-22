@@ -1,65 +1,87 @@
-const gameBoard = document.getElementById("game-board")
+window.onload = function() {
+  canvas = document.getElementById("game-board")
+  context = canvas.getContext("2d")
+  document.addEventListener("keydown", keyPush)
+  setInterval(game,1000 / 10)
+}
 
-const SIZE_OF_BOARD = 600 * 600
-const SIZE_OF_BLOCK = 40 * 40
-const numberOfBlocks = SIZE_OF_BOARD / SIZE_OF_BLOCK
-const widthInBlocks = Math.sqrt(numberOfBlocks)
-const heightInBlocks = Math.sqrt(numberOfBlocks)
+let playerX = 10
+let playerY = 10
+let gridSize = 20
+let tileCount = 20
+let appleX = 15
+let appleY = 15
+let xVelocity = 0
+let yVelocity = 0
+let trail = []
+let tail = 5
 
-let isApple = false
+function game() {
+  playerX += xVelocity
+  playerY += yVelocity
 
-document.addEventListener("keydown", keyPushed)
+  if(playerX < 0) playerX = tileCount - 1
+  if(playerX > tileCount - 1) playerX = 0
+  if(playerY < 0) playerY = tileCount - 1
+  if(playerY > tileCount - 1) playerY = 0
 
-let snake = [{
-  x:7,
-  y:7
-},{
-  x:6,
-  y:7
-},{
-  x:5,
-  y:7
-}]
+  drawCanvas()
+  drawSnake()
 
-createGameBoard()
+  trail.push({x: playerX, y:playerY})
+  while(trail.length > tail) {
+    trail.shift()
+  }
 
-function keyPushed(event) {
-  switch(event) {
+  if (appleX == playerX && appleY == playerY) {
+    eatAppleAndCreateNewOne()
+  }
+  drawApple()  
+}
+
+function drawCanvas() {
+  context.fillStyle = "black"
+  context.fillRect(0, 0, canvas.width, canvas.height)
+}
+
+function drawSnake() {
+  context.fillStyle = "lime"
+  for (let i = 0; i < trail.length; i++) {
+    context.fillRect(trail[i].x * gridSize, trail[i].y * gridSize, gridSize - 2, gridSize - 2)
+    if (trail[i].x == playerX && trail[i].y == [playerY]) {
+      tail = 5
+    }
+  }
+}
+
+function eatAppleAndCreateNewOne() {
+  tail++
+  appleX = Math.floor(Math.random() * tileCount)
+  appleY = Math.floor(Math.random() * tileCount)
+}
+
+function drawApple() {
+  context.fillStyle = "red"
+  context.fillRect(appleX * gridSize, appleY * gridSize, gridSize - 2, gridSize - 2)
+}
+
+function keyPush(event) {
+  switch(event.keyCode) {
     case 37:
-      
+      xVelocity = -1
+      yVelocity = 0
+      break
+    case 38:
+      xVelocity = 0
+      yVelocity = -1
+      break
+    case 39:
+      xVelocity = 1
+      yVelocity = 0
+      break
+    case 40:
+      xVelocity = 0
+      yVelocity = 1
+      break
   }
-}
-
-function createGameBoard() {
-  gameBoard.style.setProperty("--board-width", widthInBlocks)
-  gameBoard.style.setProperty("--board-height", heightInBlocks)
-  for (let i = 0; i < numberOfBlocks; i++) {
-    let block = document.createElement("div")
-    block.id = String(Math.floor(i / heightInBlocks)) + " " + String(i % widthInBlocks)
-    gameBoard.appendChild(block).className = "board-block"
-  }
-}
-
-function createApple() {
-  if (isApple) return
-  let x = Math.floor(Math.random() * widthInBlocks)
-  let y = Math.floor(Math.random() * heightInBlocks)
-
-  let appleBlockId = x + " " + y
-  let appleBlock = document.getElementById(appleBlockId)
-  if (appleBlock.style.backgroundColor == "white") {
-    // add one to snake if renders inside
-  }
-  appleBlock.style.backgroundColor = "red"
-}
-
-drawSnake()
-createApple()
-
-function createSnake() {
-  snake.forEach(bodyPart => {
-    let idOfBlock = bodyPart.y + " " + bodyPart.x
-    let blockUnderBodyPart = document.getElementById(idOfBlock)
-    blockUnderBodyPart.style.backgroundColor = "white"
-  })
 }
